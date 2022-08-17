@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "445417322022",
+    "project_id": "fir-lemas",
+    "storage_bucket": "fir-lemas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445417322022:android:1969dcfebcd5fbe8c818e7",
+        "android_client_info": {
+          "package_name": "ec.com.firebaselemas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445417322022-u2aoeio4sjmq9755rmsnkunjbn51v410.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMiBim1aC6_6u-_eOB8MTDodpc2NGC5no"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445417322022-u2aoeio4sjmq9755rmsnkunjbn51v410.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

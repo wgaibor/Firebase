@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">FirebaseLemas</string>
+    <string name="nombre">Nombre</string>
+    <string name="correo">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="guardar">Guardar</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="inciar_session">INICIAR SESION</string>
+    <string name="ingresar">ingresar</string>
+    <string name="visitante">visitante</string>
+    <string name="buscar">Buscar</string>
+    <string name="cerrar_session">cerrar sessión</string>
+    <string name="agregar_mascota_v1">Agregar Mascota</string>
+    <string name="subir_foto">Subir Foto</string>
+    <string name="eliminar_foto">Eliminar foto</string>
+    <string name="precio_vacuna">Precio de vacuna</string>
+    <string name="color">Color</string>
+    <string name="edad">Edad</string>
+</resources>
