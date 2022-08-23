@@ -110,5 +110,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void llamarSiguienteActividad(){
         Intent intent = new Intent(MainActivity.this, ListadoMascotaActivity.class);
         startActivity(intent);
+        //finish();
     }
 }

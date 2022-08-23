@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -31,11 +32,15 @@ public class CrearMascotaActivity extends AppCompatActivity implements View.OnCl
     Button btnGuardarMascota;
     FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
+    boolean isNecesarioActualizar = false;
+    String idMascota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_mascota);
+        this.setTitle("Crear Mascota");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         fotoMascota = findViewById(R.id.foto_mascota);
         btnSubirFoto = findViewById(R.id.btn_subir_foto);
         btnEliminarFoto = findViewById(R.id.btn_eliminar_foto);
@@ -51,6 +56,40 @@ public class CrearMascotaActivity extends AppCompatActivity implements View.OnCl
 
         mFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+        idMascota = getIntent().getStringExtra("idMascota");
+        if(idMascota != null){
+            buscarMascota(idMascota);
+        }
+    }
+
+    private void buscarMascota(String idMascota) {
+        mFirestore.collection("mascotas")
+                    .document(idMascota)
+                    .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String nombreMascota = documentSnapshot.getString("nombre");
+                        String edadMascota =  documentSnapshot.getString("edad");
+                        String colorMascota = documentSnapshot.getString("color");
+                        String precioVacuna = documentSnapshot.getString("precioVacuna");
+
+                        etNombreMascota.setText(nombreMascota);
+                        etEdadMascota.setText(edadMascota);
+                        etColorMascota.setText(colorMascota);
+                        etPrecioVacunaMascota.setText(precioVacuna);
+                        btnGuardarMascota.setText("Actualizar");
+                        isNecesarioActualizar = true;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Error al obtener los datos", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
@@ -61,9 +100,44 @@ public class CrearMascotaActivity extends AppCompatActivity implements View.OnCl
             case R.id.btn_eliminar_foto:
                 break;
             case R.id.btn_guardar_mascota:
-                guardarMascota();
+                if (isNecesarioActualizar) {
+                    actualizarMascota(idMascota);
+                } else {
+                    guardarMascota();
+                }
                 break;
         }
+    }
+
+    private void actualizarMascota(String idMascota) {
+        String nombreMascota = etNombreMascota.getText().toString().trim();
+        String edadMascota = etEdadMascota.getText().toString().trim();
+        String colorMascota = etColorMascota.getText().toString().trim();
+        String costoVacuna = etPrecioVacunaMascota.getText().toString().trim();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("nombre", nombreMascota);
+        map.put("edad", edadMascota);
+        map.put("color", colorMascota);
+        map.put("precioVacuna", costoVacuna);
+
+        mFirestore.collection("mascotas")
+                .document(idMascota)
+                .update(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getApplicationContext(), "Actualizado exitosamente", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Error al actualizar", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void guardarMascota() {
@@ -115,5 +189,11 @@ public class CrearMascotaActivity extends AppCompatActivity implements View.OnCl
                         finish();
                     }
                 });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }
