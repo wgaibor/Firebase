@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ public class ListadoMascotaActivity extends AppCompatActivity implements View.On
     FirebaseFirestore mFirestore;
     Query query;
     MascotaAdapter mAdapter;
+    SearchView search;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +50,39 @@ public class ListadoMascotaActivity extends AppCompatActivity implements View.On
         btnCerrarSession = findViewById(R.id.btn_cerrar_session);
         btnAgregarMascotaV1 = findViewById(R.id.btn_agregar_mascota_v1);
         rvListadoMascota = findViewById(R.id.rv_listado_mascota);
+        search = findViewById(R.id.search);
         btnCerrarSession.setOnClickListener(this);
         btnAgregarMascotaV1.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
         configuracionListado();
+        metodoBuscar();
+    }
+
+    private void metodoBuscar() {
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                buscarListado(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                buscarListado(s);
+                return false;
+            }
+        });
+    }
+
+    private void buscarListado(String s) {
+        FirestoreRecyclerOptions<Mascota> firestoreRecyclerOptions =
+                new FirestoreRecyclerOptions.Builder<Mascota>()
+                        .setQuery(query.orderBy("nombre")
+                                .startAt(s).endAt(s+"~"), Mascota.class).build();
+        mAdapter = new MascotaAdapter(firestoreRecyclerOptions, this, getSupportFragmentManager());
+        mAdapter.startListening();
+        rvListadoMascota.setAdapter(mAdapter);
     }
 
     @SuppressLint("NotifyDataSetChanged")

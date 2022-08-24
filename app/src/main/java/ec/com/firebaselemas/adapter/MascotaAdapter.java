@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -14,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.picasso.Picasso;
 
 import ec.com.firebaselemas.R;
 import ec.com.firebaselemas.activity.CrearMascotaActivity;
@@ -53,6 +57,14 @@ public class MascotaAdapter extends FirestoreRecyclerAdapter<Mascota, MascotaAda
         holder.edad.setText(model.getEdad());
         holder.color.setText(model.getColor());
         holder.precioVacuna.setText(model.getPrecioVacuna());
+        String fotoMasc = model.getFotoMascota();
+
+        if(fotoMasc!= null && !fotoMasc.equals("")){
+            Picasso.with(activity.getApplicationContext())
+                    .load(fotoMasc)
+                    .resize(200, 200)
+                    .into(holder.imagenMascota);
+        }
 
         holder.imgEditar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,9 +78,28 @@ public class MascotaAdapter extends FirestoreRecyclerAdapter<Mascota, MascotaAda
         holder.imgEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                eliminarMascota(id);
             }
         });
+    }
+
+    private void eliminarMascota(String id) {
+        mFirestore.collection("mascotas")
+                .document(id)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(activity, "Eliminado correctamente", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(activity, "Error al eliminar", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @NonNull
