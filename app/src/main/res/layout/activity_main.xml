@@ -83,6 +83,14 @@
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:backgroundTint="@color/cyan_800"
                 android:text="@string/visitante" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/signInButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_25dp"
+                android:layout_marginRight="@dimen/dimen_25dp"
+                android:layout_marginTop="@dimen/dimen_16dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

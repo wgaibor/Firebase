@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "445417322022-ua0nfd300c9a53atrd4bif560f8ur724.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ec.com.firebaselemas",
+            "certificate_hash": "93e17ec9ddac3de0fcc3257f8da4ad969a2363b7"
+          }
+        },
+        {
           "client_id": "445417322022-u2aoeio4sjmq9755rmsnkunjbn51v410.apps.googleusercontent.com",
           "client_type": 3
         }
